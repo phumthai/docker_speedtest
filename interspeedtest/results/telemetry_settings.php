@@ -13,10 +13,10 @@ $redact_ip_addresses = false;
 $Sqlite_db_file = '../../speedtest_telemetry.sql';
 
 // Mysql settings
-$MySql_username = getenv('MYSQL_USER');
-$MySql_password = getenv('MYSQL_PASSWORD');
-$MySql_hostname = getenv('MYSQL_HOSTNAME');
-$MySql_databasename = getenv('MYSQL_DATABASE');
+$MySql_username = 'user';
+$MySql_password = 'test';
+$MySql_hostname = 'db';
+$MySql_databasename = 'speedtest';
 $MySql_port = '3306';
 
 // Postgresql settings
