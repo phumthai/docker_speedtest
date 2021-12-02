@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Internet Speedtest login</title>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="index2.css" />
   </head>
   <body>
     <div class="center">

@@ -1,14 +1,37 @@
 html,body{
     border:none; padding:0; margin:0;
     background:#FFFFFF;
-    color:#202020;
+    color:#000000;
+    
+}
+html{
+    background-color: #bcbcbc;
+    font-family: "Segoe UI","Roboto",sans-serif;
+    background-image: url("bg01-01.jpg");
+    height: 100%;
+    background-repeat: no-repeat;
+    background-color: rgb(43,62,80);
+    font-family: Roboto;
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+    background-size: cover;
+    background-position: center center;
 }
 body{
     text-align:center;
     font-family:"Roboto",sans-serif;
+    background-color:#ececec;
+    box-sizing:border-box;
+    width:100%;
+    height:70%;
+    max-width:40em;
+    margin:4em auto;
+    box-shadow:0 1em 6em #00000080;
+    padding:1em 1em 4em 1em;
+    border-radius:0.4em;
 }
 h1{
-    color:#404040;
+    color:#020202;
 }
 #startStopBtn{
     display:inline-block;
@@ -115,23 +138,22 @@ div.testGroup{
 }
 #privacyPolicy{
     position:fixed;
-    top:2em;
-    bottom:2em;
-    left:2em;
-    right:2em;
+    top:5em;
+    bottom:20em;
+    left:20em;
+    right:20em;
     overflow-y:auto;
     width:auto;
     height:auto;
     box-shadow:0 0 3em 1em #000000;
     z-index:999999;
     text-align:left;
-    background-color:#FFFFFF;
+    background-color:#e6e6e6;
     padding:1em;
 }
 a.privacy{
     text-align:center;
     font-size:0.8em;
-    color:#808080;
     padding: 0 3em;
 }
 div.closePrivacyPolicy {
@@ -181,3 +203,36 @@ button.ghost {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+@media all and (max-width:65em){
+    body{
+        font-size:1.5vw;
+    }
+}
+@media all and (max-width:40em){
+    body{
+        font-size:0.8em;
+    }
+    div.testGroup{
+        display:block;
+        margin: 0 auto;
+    }
+}
+#progressBar{
+    width:30%;
+    height:0.3em;
+    background-color:#EEEEEE;
+    position:relative;
+    display:block;
+    margin:0 auto;
+    margin-bottom:2em;
+}
+#progress{
+    position:absolute;
+    top:0; left:0;
+    height:100%;
+    width:0%;
+    transition: width 2s;
+    background-color:#90BBFF;
+}
+
