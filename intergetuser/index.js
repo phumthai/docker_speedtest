@@ -17,11 +17,13 @@ var options = {
 
 var shot_count = -1;
 
+var oid_ipuser = "1.3.6.1.4.1.14179.2.1.4.1.2"; // ip user
 var oid_user = "1.3.6.1.4.1.14179.2.1.4.1.3"; // User
 var oid_mac = "1.3.6.1.4.1.14179.2.1.4.1.4"; // AP Mac
 var oid_dot3mac = "1.3.6.1.4.1.14179.2.2.1.1.1"; // AP dot3mac
 var oid_name = "1.3.6.1.4.1.14179.2.2.1.1.3" //AP Name
 
+var ipuser_oid = [];
 var user_oid = [];
 var mac_oid = [];
 var dot3mac_oid = [];
@@ -110,6 +112,24 @@ function feedCb_name (varbinds) {
         }
     }
 }
+function feedCb_ipuser (varbinds) {
+    for (var i = 0; i < varbinds.length; i++) {
+        if (snmp.isVarbindError (varbinds[i]))
+            console.error (snmp.varbindError (varbinds[i]));
+        else{
+            //console.log (varbinds[i].oid + "|" + varbinds[i].value);
+            var x = [];
+            var z = varbinds[i].oid;
+            z = z.replace('1.3.6.1.4.1.14179.2.1.4.1.2.','');
+            var y;
+            x.push(z);
+            y = "|" + varbinds[i].value;
+            y = y.substring(1);
+            x.push(y);
+            ipuser_oid.push(x);
+        }
+    }
+}
 
 
 var maxRepetitions = 20;
@@ -130,42 +150,19 @@ async function firstA(){
         session.subtree (oid_mac, maxRepetitions, feedCb_mac, doneCb);
         session.subtree (oid_dot3mac, maxRepetitions, feedCb_dot3mac, doneCb);
         session.subtree (oid_name, maxRepetitions, feedCb_name, doneCb);
+        session.subtree (oid_ipuser, maxRepetitions, feedCb_ipuser, doneCb);
     }
 }
 
-async function firstB(){
-    var Controler = [
-        "10.71.0.7"
-    ]
-    for(let i=0;i<Controler.length;i++){
-        let session = snmp.createSession (Controler[i], "cmumrtg",options);
-        session.subtree (oid_user, maxRepetitions, feedCb_user, doneCb);
-        session.subtree (oid_mac, maxRepetitions, feedCb_mac, doneCb);
-        session.subtree (oid_dot3mac, maxRepetitions, feedCb_dot3mac, doneCb);
-        session.subtree (oid_name, maxRepetitions, feedCb_name, doneCb);
-    }
-}
-
-async function firstC(){
-    var Controler = [
-        "10.71.0.8"
-    ]
-    for(let i=0;i<Controler.length;i++){
-        let session = snmp.createSession (Controler[i], "cmumrtg",options);
-        session.subtree (oid_user, maxRepetitions, feedCb_user, doneCb);
-        session.subtree (oid_mac, maxRepetitions, feedCb_mac, doneCb);
-        session.subtree (oid_dot3mac, maxRepetitions, feedCb_dot3mac, doneCb);
-        session.subtree (oid_name, maxRepetitions, feedCb_name, doneCb);
-    }
-}
 
 async function second(){
     try{
         for(let i=0;i<user_oid.length;i++){
-            user_oid[i].push(mac_oid[i][1])         //oid user mac
+            user_oid[i].push(mac_oid[i][1])         //oid user mac on user side
+            user_oid[i].push(ipuser_oid[i][1])
         }
         for(let j=0;j<name_oid.length;j++){
-            name_oid[j].push(dot3mac_oid[j][1])     //oid name mac
+            name_oid[j].push(dot3mac_oid[j][1])     //oid name mac on ap side
         }
     }
     catch(error){
@@ -203,6 +200,7 @@ async function fouth(){
         x.push(guid())
         x.push(user_oid[i][1]);
         x.push(user_oid[i][3]);
+        x.push(user_oid[i][4]);
         ap_user.push(x)
     }
 }
@@ -219,7 +217,7 @@ async function fifth(){
     con.connect(function(err) {
         if (err) throw err;
         console.log("Connected!");
-        var sql = "INSERT INTO user_ap (id, user, apname) VALUES ?";
+        var sql = "INSERT INTO user_ap (id, user, ip, apname) VALUES ?";
         var values = ap_user;
         ap_user = [];
         con.query(sql, [values], function (err, result) {
@@ -276,67 +274,22 @@ async function A(){
                             mac_oid = [];
                             dot3mac_oid = [];
                             name_oid = [];
-                        })
-                    },30000)
-                })
-            
-            })
-        },30000)
-    })
-}
-async function B(){
-    firstB().then(()=>{
-        setTimeout(function(){
-            second().then(()=>{
-                third().then(()=>{
-                    setTimeout(function(){
-                        fouth().then(()=>{
-                            fifth();
-                            user_oid = [];
-                            mac_oid = [];
-                            dot3mac_oid = [];
-                            name_oid = [];
+                            ipuser_oid = [];
                         })
                     },20000)
                 })
             
             })
-        },20000)
-    })
-}
-async function C(){
-    firstC().then(()=>{
-        setTimeout(function(){
-            second().then(()=>{
-                third().then(()=>{
-                    setTimeout(function(){
-                        fouth().then(()=>{
-                            fifth();
-                            user_oid = [];
-                            mac_oid = [];
-                            dot3mac_oid = [];
-                            name_oid = [];
-                        })
-                    },20000)
-                })
-            
-            })
-        },20000)
+        },40000)
     })
 }
 
 
 A();
-setInterval(() => {
-    del().then(()=>{
-        A().then(()=>{
-            // setTimeout(function(){
-            //     B().then(()=>{
-            //         setTimeout(function(){
-            //         C();
-            //         },60000)
-            //     })
-            // },60000)
-        })
-    })
-}, 1000*60*5);
+// setInterval(() => {
+//     del().then(()=>{
+//         A().then(()=>{
+
+//         })
+//     })
+// }, 1000*60*5);

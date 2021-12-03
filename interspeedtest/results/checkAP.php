@@ -3,7 +3,7 @@ session_start();
 
 
 
-function checkap(){
+function checkap($ip){
     $servername = 'db';
     $username = 'user';
     $password = 'test';
@@ -17,13 +17,13 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT apname FROM user_ap WHERE user='$userid'";
+$sql = "SELECT apname FROM user_ap WHERE user='$userid' AND ip='$ip' LIMIT 1";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
   // output data of each row
   $data;
   while($row = $result->fetch_assoc()) {
-    $data =  $data . $row["apname"] . " ";
+    $data =  $row["apname"];
   }
   return $data;
 } else {

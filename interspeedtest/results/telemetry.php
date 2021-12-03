@@ -9,7 +9,16 @@ $userid = $_SESSION['sUserid'];
 require 'telemetry_settings.php';
 require_once 'telemetry_db.php';
 
-$ip = $_SERVER['REMOTE_ADDR'];
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
+} elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+    $ip = $_SERVER['HTTP_X_REAL_IP'];
+} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $ip = preg_replace('/,.*/', '', $ip); # hosts are comma-separated, client is first
+} else {
+    $ip = $_SERVER['REMOTE_ADDR'];
+}
 $ispinfo = $_POST['ispinfo'];
 $extra = $_POST['extra'];
 $ua = $_SERVER['HTTP_USER_AGENT'];
@@ -48,7 +57,7 @@ require 'checkSource.php';
 $subnet = checksource($ip);
 
 require 'checkAP.php';
-$apname = checkap();
+$apname = checkap($ip);
 
 $id = insertSpeedtestUser($ip, $ispinfo, $extra, $ua, $lang, $dl, $ul, $ping, $jitter, $log, $userid, $subnet, $apname);
 if (false === $id) {
