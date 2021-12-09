@@ -139,10 +139,7 @@ var maxRepetitions = 20;
 
 async function firstA(){
     var Controler = [
-        "10.71.0.3",
-        "10.71.0.7",
-        "10.71.0.8",
-        "10.71.0.9"
+        "10.71.0.3"
     ]
     for(let i=0;i<Controler.length;i++){
         let session = snmp.createSession (Controler[i], "cmumrtg",options);
@@ -154,6 +151,47 @@ async function firstA(){
     }
 }
 
+async function firstB(){
+    var Controler = [
+        "10.71.0.7"
+    ]
+    for(let i=0;i<Controler.length;i++){
+        let session = snmp.createSession (Controler[i], "cmumrtg",options);
+        session.subtree (oid_user, maxRepetitions, feedCb_user, doneCb);
+        session.subtree (oid_mac, maxRepetitions, feedCb_mac, doneCb);
+        session.subtree (oid_dot3mac, maxRepetitions, feedCb_dot3mac, doneCb);
+        session.subtree (oid_name, maxRepetitions, feedCb_name, doneCb);
+        session.subtree (oid_ipuser, maxRepetitions, feedCb_ipuser, doneCb);
+    }
+}
+
+async function firstC(){
+    var Controler = [
+        "10.71.0.8"
+    ]
+    for(let i=0;i<Controler.length;i++){
+        let session = snmp.createSession (Controler[i], "cmumrtg",options);
+        session.subtree (oid_user, maxRepetitions, feedCb_user, doneCb);
+        session.subtree (oid_mac, maxRepetitions, feedCb_mac, doneCb);
+        session.subtree (oid_dot3mac, maxRepetitions, feedCb_dot3mac, doneCb);
+        session.subtree (oid_name, maxRepetitions, feedCb_name, doneCb);
+        session.subtree (oid_ipuser, maxRepetitions, feedCb_ipuser, doneCb);
+    }
+}
+
+async function firstD(){
+    var Controler = [
+        "10.71.0.9"
+    ]
+    for(let i=0;i<Controler.length;i++){
+        let session = snmp.createSession (Controler[i], "cmumrtg",options);
+        session.subtree (oid_user, maxRepetitions, feedCb_user, doneCb);
+        session.subtree (oid_mac, maxRepetitions, feedCb_mac, doneCb);
+        session.subtree (oid_dot3mac, maxRepetitions, feedCb_dot3mac, doneCb);
+        session.subtree (oid_name, maxRepetitions, feedCb_name, doneCb);
+        session.subtree (oid_ipuser, maxRepetitions, feedCb_ipuser, doneCb);
+    }
+}
 
 async function second(){
     try{
@@ -269,27 +307,106 @@ async function A(){
                 third().then(()=>{
                     setTimeout(function(){
                         fouth().then(()=>{
-                            fifth();
                             user_oid = [];
                             mac_oid = [];
                             dot3mac_oid = [];
                             name_oid = [];
                             ipuser_oid = [];
                         })
-                    },20000)
+                    },6000)
                 })
             
             })
-        },40000)
+        },14000)
     })
 }
 
+async function B(){
+    firstB().then(()=>{
+        setTimeout(function(){
+            second().then(()=>{
+                third().then(()=>{
+                    setTimeout(function(){
+                        fouth().then(()=>{
+                            user_oid = [];
+                            mac_oid = [];
+                            dot3mac_oid = [];
+                            name_oid = [];
+                            ipuser_oid = [];
+                        })
+                    },6000)
+                })
+            
+            })
+        },14000)
+    })
+}
 
-A();
-// setInterval(() => {
-//     del().then(()=>{
-//         A().then(()=>{
+async function C(){
+    firstC().then(()=>{
+        setTimeout(function(){
+            second().then(()=>{
+                third().then(()=>{
+                    setTimeout(function(){
+                        fouth().then(()=>{
+                            user_oid = [];
+                            mac_oid = [];
+                            dot3mac_oid = [];
+                            name_oid = [];
+                            ipuser_oid = [];
+                        })
+                    },6000)
+                })
+            
+            })
+        },14000)
+    })
+}
 
-//         })
-//     })
-// }, 1000*60*5);
+async function D(){
+    firstD().then(()=>{
+        setTimeout(function(){
+            second().then(()=>{
+                third().then(()=>{
+                    setTimeout(function(){
+                        fouth().then(()=>{
+                            user_oid = [];
+                            mac_oid = [];
+                            dot3mac_oid = [];
+                            name_oid = [];
+                            ipuser_oid = [];
+                        })
+                    },6000)
+                })
+            
+            })
+        },14000)
+    })
+}
+
+async function final(){
+    del().then(()=>{
+        A().then(()=>{
+            setTimeout(function(){
+                B().then(()=>{
+                    setTimeout(function(){
+                        C().then(()=>{
+                            setTimeout(function(){
+                                D().then(()=>{
+                                    setTimeout(function(){
+                                        fifth();
+                                    },20500)
+                                })
+                            },20500)
+                        })
+                    },20500)
+                })
+            },20500)
+        })
+    })
+}
+
+final();
+setInterval(() => {
+    final();
+}, 1000*60*8);
