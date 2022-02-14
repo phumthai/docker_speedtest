@@ -53,12 +53,17 @@ if(!isset($_SESSION['sUserid'])){
 		</div>
 		<div id="shareArea" style="display:none"></div>
 		<?php
+			require __DIR__ . "/results/checkAP2.php";
+			$apname = checkAP2();
+			$time = checktime();
+			echo "<p>$apname</p>";
 			$accessToken = $_SESSION['accessToken'];
 			require('userinfo.class.php');
 			$userinfo = new UserInfo();
 			$user = $userinfo->getUserInfo($accessToken);
 			$userid = $user->cmuitaccount;
 			echo "<p>$userid</p>";
+			echo "<p>$time</p>";
 			echo "<a href=\"myresult.php\" target=\"_blank\">Test history</a>";
 		?>
 	</div>
