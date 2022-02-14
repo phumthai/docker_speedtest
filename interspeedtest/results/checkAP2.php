@@ -18,7 +18,7 @@
     $dbname = '';
     $userid = $_SESSION['sUserid'];
     
-    $date = date('Ymd')
+    $date = date('Ymd');
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -43,7 +43,7 @@
   }
 
   function checktime(){
-    return date("Y-m-d h:i:sa")
+    return date("Y-m-d h:i:sa");
   }
 
 ?>
