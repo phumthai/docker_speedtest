@@ -50,19 +50,31 @@ if(!isset($_SESSION['sUserid'])){
 		</div>
 		<div id="ipArea">
 			<span id="ip"></span>
+			<?php
+				if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+					$ip = $_SERVER['HTTP_CLIENT_IP'];
+				} elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+					$ip = $_SERVER['HTTP_X_REAL_IP'];
+				} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+					$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+					$ip = preg_replace('/,.*/', '', $ip); # hosts are comma-separated, client is first
+				} else {
+					$ip = $_SERVER['REMOTE_ADDR'];
+				}
+				require __DIR__ . "/results/checkAP2.php";
+				$apname = checkAP2($ip);
+				echo "<p>$apname</p>";
+			?>
 		</div>
 		<div id="shareArea" style="display:none"></div>
 		<?php
-			require __DIR__ . "/results/checkAP2.php";
-			$apname = checkAP2();
-			$time = checktime();
-			echo "<p>$apname</p>";
 			$accessToken = $_SESSION['accessToken'];
 			require('userinfo.class.php');
 			$userinfo = new UserInfo();
 			$user = $userinfo->getUserInfo($accessToken);
 			$userid = $user->cmuitaccount;
 			echo "<p>$userid</p>";
+			$time = date("Y-m-d H:i:s");
 			echo "<p>$time</p>";
 			echo "<a href=\"myresult.php\" target=\"_blank\">Test history</a>";
 		?>
